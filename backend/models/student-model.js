@@ -9,7 +9,17 @@ const schema = mongoose.Schema({
   name: {
     type: String,
     required: true
-  }
+  },
+  values: [{
+    attribute: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Attribute',
+      required: true
+    },
+    value: {
+      type: String
+    }
+  }]
 })
 
 const Student = mongoose.models.Schema = mongoose.model("Student", schema)
