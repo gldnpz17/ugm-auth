@@ -12,6 +12,7 @@
     "cross-env": "^7.0.2",
     "dayjs": "1.8.28",
     "esm": "^3.2.25",
+    "mongoose": "^6.3.3",
     "next": "latest",
     "postcss-preset-env": "^6.7.0",
     "react": "^17.0.2",
