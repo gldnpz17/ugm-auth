@@ -10,6 +10,14 @@ html {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+#__next {
+  height: 100%;
+}
+
+.ant-card-body {
+  height: 100%;
+}
+
 body {
   background-color: var(--backgroundColor);
   -ms-text-size-adjust: 100%;

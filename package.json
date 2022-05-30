@@ -9,14 +9,18 @@
     "@ant-design/icons": "4.2.1",
     "@next/bundle-analyzer": "^9.1.4",
     "antd": "4.3.0",
+    "axios": "^0.27.2",
+    "cookie": "^0.5.0",
     "cross-env": "^7.0.2",
     "dayjs": "1.8.28",
     "esm": "^3.2.25",
-    "mongoose": "^6.3.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.4",
     "next": "latest",
     "postcss-preset-env": "^6.7.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-query": "^3.39.0"
   },
   "browser": {
     "fs": false,

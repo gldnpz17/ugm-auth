@@ -7,8 +7,7 @@ const schema = mongoose.Schema({
     unique: true
   },
   name: {
-    type: String,
-    required: true
+    type: String
   },
   values: [{
     attribute: {
@@ -22,6 +21,6 @@ const schema = mongoose.Schema({
   }]
 })
 
-const Student = mongoose.models.Schema = mongoose.model("Student", schema)
+const Student = mongoose.models.Student || mongoose.model("Student", schema)
 
 export default Student
