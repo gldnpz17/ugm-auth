@@ -94,7 +94,7 @@ export default function Home() {
           }
         </Card>
         <p style={{ textAlign: 'center' }}>
-          Already registered your application? Visit our <a href='/docs'>docs</a>!
+          Already registered your application? Visit our <a href='https://github.com/gldnpz17/ugm-auth/wiki'>docs</a>!
         </p>
       </div>
     </div>
