@@ -1,24 +1,28 @@
 import RouteBuilder from "../../../backend/common/route-builder"
 import jwt from "jsonwebtoken"
+import Student from "../../../backend/models/student-model"
+import Attribute from "../../../backend/models/attribute-model"
 
-const getIdentity = (req, res) => {
+const getIdentity = async (req, res) => {
   const { studentId } = req.query
   const rawAccessToken = req.headers['authorization'].split(' ')[1]
 
-  const accessToken = jwt.verify(rawAccessToken, "super-secret-key")
+  const accessToken = jwt.verify(rawAccessToken, process.env.JWT_SIGNING_KEY)
 
-  if (accessToken.data.studentId === studentId) {
-    res.send({
-      studentId,
-      niu: "444051",
-      attributes: [
-        { name: "Nama lengkap", value: "Alice [REDACTED]" },
-        { name: "Fakultas", value: "Teknik" },
-        { name: "Departemen", value: "DTETI" },
-        { name: "Jurusan", value: "Teknologi Informasi" },
-        { name: "Angkatan", value: "2019" }
-      ]
-    })
+  if (accessToken.student.id === studentId) {
+    const student = await Student
+      .findById(studentId)
+      .populate({
+        path: 'values',
+        populate: {
+          path: 'attribute',
+          model: 'Attribute'
+        }
+      })
+
+    res.send(student)
+  } else {
+    res.status(401).send("Invalid access token.")
   }
 }
 

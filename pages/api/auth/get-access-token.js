@@ -1,26 +1,32 @@
 import RouteBuilder from "../../../backend/common/route-builder"
 import jwt from "jsonwebtoken"
+import Client from "../../../backend/models/client-model"
 
-const getAccessToken = (req, res) => {
-  const { authToken: rawAuthToken, clientId, clientSecret } = req.body
+const getAccessToken = async (req, res) => {
+  const { authToken: rawAuthToken, clientId, clientSecret: rawClientSecret } = req.body
 
-  const authToken = jwt.verify(rawAuthToken, "super-secret-key")
+  const authToken = jwt.verify(rawAuthToken, process.env.JWT_SIGNING_KEY)
+  const clientSecret = jwt.verify(rawClientSecret, process.env.JWT_SIGNING_KEY)
+
+  const client = await Client.findById(authToken.sub)
+
+  console.log(client, clientId, authToken, clientSecret)
 
   if (
-    authToken.sub === "alice" && 
-    clientId === authToken.clientId &&
-    clientId === "demo-app-client-id" &&
-    clientSecret === "demo-app-client-secret"
+    client && 
+    authToken.type === "AuthToken" &&
+    clientId === authToken.sub &&
+    clientId === clientSecret.sub
   ) {
     res.send({
       accessToken: jwt.sign({ 
-        sub: "alice", 
-        data: {
-          studentId: "4l1c3Stud3ntId",
-          niu: "444051"
-        } 
-      }, "super-secret-key", { expiresIn: 60 })
+        sub: clientId, 
+        type: "AccessToken",
+        student: authToken.student
+      }, process.env.JWT_SIGNING_KEY, { expiresIn: "30d" })
     })
+  } else {
+    res.status(401).send("Invalid client credentials.")
   }
 }
 
