@@ -4,6 +4,7 @@ import TextArea from "antd/lib/input/TextArea";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { createAttribute, deleteAttribute, readAllAttributes } from "../../api-requests/attributes";
+import { introspectAuth } from "../../api-requests/auth";
 import { readAllStudents, createStudent, upsertStudentAttribute, deleteStudent } from "../../api-requests/students";
 
 const AddAttributeModal = ({ isOpen, addAttribute, close }) => {
@@ -107,56 +108,20 @@ const AddStudentModal = ({ isOpen, addStudent, close }) => {
   )
 }
 
-const useStudents = () => {
-  const [students, dispatch] = useReducer((students, action) => {
-    switch (action.type) {
-      case 'add': {
-        const { niu } = action.args
-
-        return [...students, { niu, attributes: [] }]
-      }
-      case 'set-attribute': {
-        const { niu, attributeId, value } = action.args
-
-        const student = students.find(student => student.niu === niu)
-
-        const attribute = student.attributes.find(attribute => attribute.id === attributeId)
-    
-        if (attribute) {
-          attribute.value = value
-        } else {
-          student.attributes.push({ id: attributeId, value })
-        }
-    
-        return [...students]
-      }
-      case 'delete': {
-        return students.filter(student => student.niu !== action.args.niu)
-      }
-      default:
-        return students
-    }
-  }, [])
-
-  return {
-    students,
-    addStudent: ({ niu }) => dispatch({ type: 'add', args: { niu } }),
-    setAttribute: ({ niu, attributeId, value }) => dispatch({ type: 'set-attribute', args: { niu, attributeId, value } }),
-    removeStudent: ({ niu }) => dispatch({ type: 'delete', args: { niu } })
-  }
-}
-
 export default function AdminPage() {
   const [attributeModalOpen, setAttributeModalOpen] = useState(false)
   const [studentModalOpen, setStudentModalOpen] = useState(false)
 
   const client = useQueryClient()
 
+  const { isLoading: authLoading, data: authData } = useQuery(["auth", "introspect"], introspectAuth)
+
   const { isLoading: attributesLoading, data: attributes } = useQuery(["attributes"], readAllAttributes, {
+    enabled: !authLoading,
     initialData: []
   })
   const { isLoading: studentsLoading, data: students } = useQuery(["students"], readAllStudents, {
-    enabled: !attributesLoading,
+    enabled: !authLoading && !attributesLoading,
     initialData: []
   })
 
@@ -272,7 +237,11 @@ export default function AdminPage() {
     }))
   }, [students])
 
-  if (studentsLoading || attributesLoading) return null
+  if (authLoading) return null
+
+  if (!authLoading && authData.token === null) window.location.href = "/admin/login"
+
+  if (studentsLoading || attributesLoading || authData.token === null) return null
 
   return (
     <div style={{ padding: '2rem' }}>

@@ -1,6 +1,7 @@
 import RouteBuilder from "../../../../../../backend/common/route-builder"
 import Student from "../../../../../../backend/models/student-model"
 import mongoose from "mongoose"
+import allowAdmin from "../../../../../../backend/middlewares/allow-admin"
 
 const upsertAttributeValue = async (req, res) => {
   const { studentId, attributeId } = req.query
@@ -23,6 +24,8 @@ const upsertAttributeValue = async (req, res) => {
   res.send(student)
 }
 
-export default new RouteBuilder()
-  .put(upsertAttributeValue)
-  .build()
+export default allowAdmin(
+  new RouteBuilder()
+    .put(upsertAttributeValue)
+    .build()
+)

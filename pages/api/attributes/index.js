@@ -1,5 +1,6 @@
 import mongooseConnect from "../../../backend/common/mongoose-connect"
 import RouteBuilder from "../../../backend/common/route-builder"
+import allowAdmin from "../../../backend/middlewares/allow-admin"
 import Attribute from "../../../backend/models/attribute-model"
 
 const createAttribute = async (req, res) => {
@@ -22,4 +23,9 @@ const readAllAttributes = async (req, res) => {
   res.send(attributes)
 }
 
-export default new RouteBuilder().get(readAllAttributes).post(createAttribute).build()
+export default allowAdmin(
+  new RouteBuilder()
+    .get(readAllAttributes)
+    .post(createAttribute)
+    .build()
+)

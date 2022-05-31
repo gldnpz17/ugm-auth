@@ -1,8 +1,4 @@
 import { Form, Select, InputNumber, Switch, Slider, Button, Steps, Step, Card, Input, Row, Col, Spin } from 'antd'
-
-// Custom DatePicker that uses Day.js instead of Moment.js
-import DatePicker from '../components/DatePicker'
-
 import { CheckCircleOutlined, CodeOutlined, HomeFilled, LoadingOutlined, LockOutlined, SafetyCertificateOutlined, SmileFilled } from '@ant-design/icons'
 import TextArea from 'antd/lib/input/TextArea'
 import { useMutation } from 'react-query'
@@ -12,7 +8,6 @@ import { useState } from 'react'
 const ClientInfoStep = ({ nextStep }) => {
   const { mutateAsync } = useMutation(createClient, {
     onSuccess: (data) => {
-      console.log(data)
       nextStep(data)
     }
   })

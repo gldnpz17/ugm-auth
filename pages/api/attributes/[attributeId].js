@@ -1,4 +1,5 @@
 import RouteBuilder from "../../../backend/common/route-builder"
+import allowAdmin from "../../../backend/middlewares/allow-admin"
 import Attribute from "../../../backend/models/attribute-model"
 import Student from "../../../backend/models/student-model"
 
@@ -17,6 +18,8 @@ const deleteAttribute = async (req, res) => {
   res.send(deletedAttribute)
 }
 
-export default new RouteBuilder()
-  .delete(deleteAttribute)
-  .build()
+export default allowAdmin(
+  new RouteBuilder()
+    .delete(deleteAttribute)
+    .build()
+)

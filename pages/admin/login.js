@@ -28,7 +28,7 @@ export default function LoginPage() {
             name="password"
             rules={[{ required: true, message: `Password can't be empty.` }]}
           >
-            <Input />
+            <Input type="password" />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8 }}>
             <Button type='primary' htmlType='submit'>Login</Button>

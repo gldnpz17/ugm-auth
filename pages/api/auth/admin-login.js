@@ -1,5 +1,6 @@
 import RouteBuilder from "../../../backend/common/route-builder"
 import jwt from "jsonwebtoken"
+import { serialize } from 'cookie'
 
 const generateRandomId = (length) => {
   const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -14,12 +15,14 @@ const adminLogin = (req, res) => {
   const { password } = req.body
 
   if (password === process.env.ADMIN_PASSWORD) {
-    res.send({
-      authToken: jwt.sign({
-        sessionId: generateRandomId(16)
-      }, process.env.JWT_SIGNING_KEY),
-      redirectUrl: "http://localhost:3200/redirect-handler"
-    })
+
+    const token = jwt.sign({
+      sessionId: generateRandomId(16)
+    }, process.env.JWT_SIGNING_KEY, { expiresIn: "7d" })
+
+    res
+      .setHeader('Set-Cookie', serialize('authorization', `Bearer ${token}`, { path: '/' }))
+      .send("Logged in") 
   } else {
     res.status(401).send({
       error: "Invalid password"

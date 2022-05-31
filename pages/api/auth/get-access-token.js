@@ -10,8 +10,6 @@ const getAccessToken = async (req, res) => {
 
   const client = await Client.findById(authToken.sub)
 
-  console.log(client, clientId, authToken, clientSecret)
-
   if (
     client && 
     authToken.type === "AuthToken" &&

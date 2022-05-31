@@ -1,6 +1,7 @@
 import RouteBuilder from "../../../backend/common/route-builder"
 import Client from "../../../backend/models/client-model"
 import jwt from "jsonwebtoken"
+import allowAdmin from "../../../backend/middlewares/allow-admin"
 
 const createClient = async (req, res) => {
   const { name, description, redirectUrl } = req.body
@@ -20,6 +21,8 @@ const createClient = async (req, res) => {
   })
 }
 
-export default new RouteBuilder()
-  .post(createClient)
-  .build()
+export default allowAdmin(
+  new RouteBuilder()
+    .post(createClient)
+    .build()
+)

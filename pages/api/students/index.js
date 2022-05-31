@@ -2,6 +2,7 @@ import mongooseConnect from "../../../backend/common/mongoose-connect"
 import RouteBuilder from "../../../backend/common/route-builder"
 import Student from "../../../backend/models/student-model"
 import Attribute from "../../../backend/models/attribute-model"
+import allowAdmin from "../../../backend/middlewares/allow-admin"
 
 const createStudent = async (req, res) => {
   await mongooseConnect()
@@ -31,7 +32,9 @@ const readAllStudents = async (req, res) => {
   res.send(students)
 }
 
-export default new RouteBuilder()
-  .post(createStudent)
-  .get(readAllStudents)
-  .build()
+export default allowAdmin(
+  new RouteBuilder()
+    .post(createStudent)
+    .get(readAllStudents)
+    .build()
+)
