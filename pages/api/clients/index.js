@@ -24,8 +24,6 @@ const createClient = async (req, res) => {
   })
 }
 
-export default allowAdmin(
-  new RouteBuilder()
-    .post(createClient)
-    .build()
-)
+export default new RouteBuilder()
+  .post(createClient)
+  .build()
