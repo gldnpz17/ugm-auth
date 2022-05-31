@@ -9,7 +9,7 @@ const getIdentity = async (req, res) => {
 
   const accessToken = jwt.verify(rawAccessToken, process.env.JWT_SIGNING_KEY)
 
-  if (accessToken.student.id === studentId) {
+  if (accessToken.type === "AccessToken" && accessToken.student.id === studentId) {
     const student = await Student
       .findById(studentId)
       .populate({
