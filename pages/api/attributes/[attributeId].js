@@ -1,10 +1,14 @@
+import mongooseConnect from "../../../backend/common/mongoose-connect"
 import RouteBuilder from "../../../backend/common/route-builder"
 import allowAdmin from "../../../backend/middlewares/allow-admin"
 import Attribute from "../../../backend/models/attribute-model"
 import Student from "../../../backend/models/student-model"
 
+
 const deleteAttribute = async (req, res) => {
   const { attributeId } = req.query
+
+  await mongooseConnect()
 
   const deletedAttribute = await Attribute.findByIdAndDelete(attributeId)
 

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 import Client from "../../../backend/models/client-model"
 import Student from "../../../backend/models/student-model"
 import axios from "axios"
+import mongooseConnect from "../../../backend/common/mongoose-connect"
 
 const CHARSET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 const generateRandomId = () => {
@@ -35,6 +36,8 @@ const login = async (username, password) => {
 
 const generateAuthToken = async (req, res) => {
   const { ugmId, password, clientId } = req.body
+
+  await mongooseConnect()
 
   const client = await Client.findById(clientId)
 

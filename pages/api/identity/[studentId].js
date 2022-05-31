@@ -2,6 +2,7 @@ import RouteBuilder from "../../../backend/common/route-builder"
 import jwt from "jsonwebtoken"
 import Student from "../../../backend/models/student-model"
 import Attribute from "../../../backend/models/attribute-model"
+import mongooseConnect from "../../../backend/common/mongoose-connect"
 
 const getIdentity = async (req, res) => {
   const { studentId } = req.query
@@ -10,6 +11,8 @@ const getIdentity = async (req, res) => {
   const accessToken = jwt.verify(rawAccessToken, process.env.JWT_SIGNING_KEY)
 
   if (accessToken.type === "AccessToken" && accessToken.student.id === studentId) {
+    await mongooseConnect()
+
     const student = await Student
       .findById(studentId)
       .populate({

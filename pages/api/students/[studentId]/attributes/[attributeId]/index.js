@@ -2,10 +2,13 @@ import RouteBuilder from "../../../../../../backend/common/route-builder"
 import Student from "../../../../../../backend/models/student-model"
 import mongoose from "mongoose"
 import allowAdmin from "../../../../../../backend/middlewares/allow-admin"
+import mongooseConnect from "../../../../../../backend/common/mongoose-connect"
 
 const upsertAttributeValue = async (req, res) => {
   const { studentId, attributeId } = req.query
   const { value } = req.body
+
+  await mongooseConnect()
 
   const student = await Student.findById(studentId)
 
